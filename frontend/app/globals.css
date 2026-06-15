@@ -52,6 +52,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden; /* fallback for engines without `clip` (older Safari) */
   overflow-x: clip;
 }
 
@@ -166,6 +167,7 @@ body::after {
 
   .card-surface {
     background: var(--color-parch-soft);
+    border: 1px solid rgba(201, 165, 92, 0.35); /* fallback */
     border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
     border-radius: 20px;
     transition:
@@ -194,8 +196,11 @@ body::after {
   }
 
   /* eased canvas seams — smoothstep stops kill gradient banding,
-     oklab keeps the indigo→parchment midpoint from going grey */
+     oklab keeps the indigo→parchment midpoint from going grey.
+     The plain two-stop gradient is a fallback for engines without color-mix /
+     oklab (older Safari); the richer declaration below overrides where supported. */
   .seam-to-parch {
+    background: linear-gradient(to bottom, var(--color-dusk), var(--color-parch));
     background: linear-gradient(
       to bottom,
       var(--color-dusk) 0%,
@@ -210,6 +215,7 @@ body::after {
     );
   }
   .seam-to-dusk {
+    background: linear-gradient(to bottom, var(--color-parch), var(--color-dusk));
     background: linear-gradient(
       to bottom,
       var(--color-parch) 0%,

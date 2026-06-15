@@ -20,9 +20,9 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 function ChristalinMock() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-parch-soft px-8 text-ink">
-      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold-deep">Refined unisex salon</p>
-      <p className="display text-3xl md:text-4xl">Christalin Mirrors</p>
-      <span className="h-px w-24 bg-gold" />
+      <p className="font-mono text-[9px] uppercase tracking-[0.28em] text-gold-deep md:text-[10px]">Refined unisex salon</p>
+      <p className="display text-2xl md:text-3xl">Christalin Mirrors</p>
+      <span className="h-px w-20 bg-gold md:w-24" />
       <div className="mt-3 grid w-full max-w-sm grid-cols-3 gap-3">
         {[0, 1, 2].map((i) => (
           <div key={i} className="h-16 rounded-lg bg-parch" />
@@ -36,9 +36,9 @@ function ChristalinMock() {
 function EditsClubMock() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-[#15100c] px-8 text-[#e8d9c4]">
-      <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#a47b5a]">Visual storytelling</p>
-      <p className="display text-3xl uppercase tracking-[0.12em] md:text-4xl">The Edits Club</p>
-      <span className="h-px w-24 bg-[#a47b5a]" />
+      <p className="font-mono text-[9px] uppercase tracking-[0.28em] text-[#a47b5a] md:text-[10px]">Visual storytelling</p>
+      <p className="display text-2xl uppercase tracking-[0.1em] md:text-3xl">The Edits Club</p>
+      <span className="h-px w-20 bg-[#a47b5a] md:w-24" />
       <div className="mt-3 flex h-14 w-14 items-center justify-center rounded-full border border-[#a47b5a]">
         <svg viewBox="0 0 14 16" className="ml-0.5 h-4 w-4 fill-[#e8d9c4]" aria-hidden="true">
           <path d="M0 0 L14 8 L0 16 Z" />

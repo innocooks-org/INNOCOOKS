@@ -17,7 +17,7 @@ export default function FinalCTA() {
   return (
     <section id="start" className="relative overflow-hidden bg-dusk text-cream">
       <div className="glow-field" aria-hidden="true" />
-      <div className="container-x relative flex min-h-screen flex-col items-center justify-center py-32 text-center">
+      <div className="container-x relative flex min-h-[100svh] flex-col items-center justify-center py-28 text-center md:py-32">
         <Reveal>
           <p className="label-mono text-gold">/ 05 — Start</p>
           <h2 className="display mt-8 max-w-[20ch] text-[clamp(2.2rem,5.2vw,4.2rem)]">

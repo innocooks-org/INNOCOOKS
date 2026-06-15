@@ -66,7 +66,7 @@ export default function Services() {
 
         <p
           ref={stmtRef}
-          className="hl-statement display mt-10 max-w-[24ch] text-[clamp(1.9rem,5.4vw,4.4rem)] leading-[1.12] md:mt-12"
+          className="display mt-10 max-w-[24ch] text-[clamp(1.9rem,5.4vw,4.4rem)] leading-[1.12] md:mt-12"
         >
           {WORDS.map(({ w, key }, i) => (
             <Fragment key={i}>

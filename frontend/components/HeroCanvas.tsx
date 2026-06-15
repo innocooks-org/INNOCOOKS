@@ -86,13 +86,21 @@ export default function HeroCanvas({
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const finePointer = window.matchMedia("(pointer: fine)").matches;
+    // touch / small screens have no cursor to track, so the strand only sways:
+    // run the whole loop at 30fps with fewer segments + iterations. Roughly
+    // halves the hero's cost on phones with no perceptible change to the sway.
+    const lite = !finePointer || window.innerWidth < 768;
 
     // damping < default (0.992) so the strand settles with real weight instead
     // of drifting in slow motion; iterations keep it taut (no heavy sag) under
     // the higher gravity; gravity (per-mode) carries the rest. Point count and
     // iterations are trimmed from the old 48/20 — the quadratic-smoothed draw
     // hides the lower resolution, and the solve cost drops by ~50%.
-    const thread = new VerletThread({ count: 34, damping: 0.95, iterations: 13 });
+    const thread = new VerletThread({
+      count: lite ? 24 : 34,
+      damping: 0.95,
+      iterations: lite ? 10 : 13,
+    });
     const atmo = new Atmosphere();
     const letters = Array.from(document.querySelectorAll<HTMLElement>(letterSelector));
     const wordmark = document.querySelector<HTMLElement>(wordmarkSelector);
@@ -116,6 +124,9 @@ export default function HeroCanvas({
     // atmosphere repaints at ~30Hz (its motes/glows drift slowly)
     let atmoAcc = 0;
     const ATMO_DT = 1 / 30;
+    // whole-loop throttle on lite devices
+    let frameAcc = 0;
+    const LITE_DT = 1 / 30;
     let io: IntersectionObserver | null = null;
     let onVis: (() => void) | null = null;
 
@@ -336,6 +347,18 @@ export default function HeroCanvas({
       let dt = (now - last) / 1000;
       last = now;
       if (dt > 0.05) dt = 0.05;
+      // on lite (touch/small) devices, coalesce to ~30fps: accumulate skipped
+      // time and step once with the summed dt so motion stays time-correct.
+      if (lite) {
+        frameAcc += dt;
+        if (frameAcc < LITE_DT) {
+          if (running) raf = requestAnimationFrame(frame);
+          return;
+        }
+        dt = frameAcc;
+        frameAcc = 0;
+        if (dt > 0.05) dt = 0.05;
+      }
       step(dt);
       if (running) raf = requestAnimationFrame(frame);
     }
