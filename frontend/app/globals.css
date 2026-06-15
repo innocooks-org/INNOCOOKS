@@ -176,6 +176,23 @@ body::after {
     border-color: var(--color-gold);
   }
 
+  /* SERVICES — scroll-linked word reveal. GSAP scrubs each word's opacity from
+     dim→1 across the section's scroll range (compositor-cheap). Keyword colour
+     is static: gold for the four capabilities, ink for the rest. Reduced-motion
+     / no-JS render every word fully lit. */
+  /* inline-block so each word can rise (yPercent) as it lights; the spaces are
+     real text nodes BETWEEN the spans, so words never jam together. */
+  .hl-word {
+    display: inline-block;
+    color: var(--color-ink);
+  }
+  .hl-word[data-key="1"] {
+    color: var(--color-gold-deep);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hl-word { opacity: 1 !important; }
+  }
+
   /* eased canvas seams — smoothstep stops kill gradient banding,
      oklab keeps the indigo→parchment midpoint from going grey */
   .seam-to-parch {

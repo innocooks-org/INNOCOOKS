@@ -150,24 +150,25 @@ export class VerletThread {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
+    // glow is built from stacked translucent strokes (widest = faintest) drawn
+    // additively — NO canvas shadowBlur, which is the single most expensive
+    // per-frame canvas op. Visually this reads as the same gold bloom.
+    ctx.globalCompositeOperation = "lighter";
     ctx.strokeStyle = gold;
-    ctx.shadowColor = gold;
-    ctx.shadowBlur = 26 * this.glow;
-    ctx.globalAlpha = 0.18 * this.alpha * this.glow;
-    ctx.lineWidth = this.width * 3.4;
+
+    ctx.globalAlpha = 0.09 * this.alpha * this.glow;
+    ctx.lineWidth = this.width * 5;
     this.buildPath(ctx, pts); ctx.stroke();
 
-    ctx.globalAlpha = 0.4 * this.alpha;
-    ctx.shadowBlur = 14 * this.glow;
-    ctx.lineWidth = this.width * 1.7;
+    ctx.globalAlpha = 0.16 * this.alpha * this.glow;
+    ctx.lineWidth = this.width * 2.6;
     this.buildPath(ctx, pts); ctx.stroke();
 
+    ctx.globalCompositeOperation = "source-over";
     ctx.globalAlpha = this.alpha;
-    ctx.shadowBlur = 6 * this.glow;
     ctx.lineWidth = this.width;
     this.buildPath(ctx, pts); ctx.stroke();
 
-    ctx.shadowBlur = 0;
     ctx.globalAlpha = 0.55 * this.alpha;
     ctx.strokeStyle = "#f4e6c2";
     ctx.lineWidth = Math.max(1, this.width * 0.32);

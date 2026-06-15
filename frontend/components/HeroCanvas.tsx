@@ -88,9 +88,11 @@ export default function HeroCanvas({
     const finePointer = window.matchMedia("(pointer: fine)").matches;
 
     // damping < default (0.992) so the strand settles with real weight instead
-    // of drifting in slow motion; extra iterations keep it taut (no heavy sag)
-    // under the higher gravity; gravity (per-mode) carries the rest.
-    const thread = new VerletThread({ damping: 0.95, iterations: 20 });
+    // of drifting in slow motion; iterations keep it taut (no heavy sag) under
+    // the higher gravity; gravity (per-mode) carries the rest. Point count and
+    // iterations are trimmed from the old 48/20 — the quadratic-smoothed draw
+    // hides the lower resolution, and the solve cost drops by ~50%.
+    const thread = new VerletThread({ count: 34, damping: 0.95, iterations: 13 });
     const atmo = new Atmosphere();
     const letters = Array.from(document.querySelectorAll<HTMLElement>(letterSelector));
     const wordmark = document.querySelector<HTMLElement>(wordmarkSelector);
@@ -106,6 +108,14 @@ export default function HeroCanvas({
     const mouse = { x: 0, y: 0, active: false };
     let W = 0, H = 0, dpr = 1, raf = 0, last = performance.now(), autoT = 0, beadF = 0;
     let running = false, onScreen = true;
+    // letter-warming runs at ~30Hz (it eases, it doesn't need every frame) and
+    // the letter centres are measured ONCE (and on resize / after fonts) rather
+    // than every frame — the per-frame layout thrash was the hero's main cost.
+    let warmAcc = 0, measurePending = true;
+    const WARM_DT = 1 / 30;
+    // atmosphere repaints at ~30Hz (its motes/glows drift slowly)
+    let atmoAcc = 0;
+    const ATMO_DT = 1 / 30;
     let io: IntersectionObserver | null = null;
     let onVis: (() => void) | null = null;
 
@@ -118,12 +128,20 @@ export default function HeroCanvas({
     function size() {
       W = wrap.clientWidth;
       H = wrap.clientHeight;
-      dpr = Math.min(2, window.devicePixelRatio || 1);
-      for (const cv of [atmoCv, backCv, frontCv]) {
+      const device = window.devicePixelRatio || 1;
+      // the strand is a thin line, so a little sharpness helps — cap at 1.5.
+      // the atmosphere is pure soft glow + blurry motes: render it at DPR 1 even
+      // on retina (no visible loss, ~quarter the fill cost of native 2x).
+      dpr = Math.min(1.5, device);
+      const aDpr = 1;
+      measurePending = true; // letters reflow on resize — re-measure their centres
+      for (const cv of [backCv, frontCv]) {
         cv.width = W * dpr; cv.height = H * dpr;
         cv.style.width = W + "px"; cv.style.height = H + "px";
       }
-      ax.setTransform(dpr, 0, 0, dpr, 0, 0);
+      atmoCv.width = W * aDpr; atmoCv.height = H * aDpr;
+      atmoCv.style.width = W + "px"; atmoCv.style.height = H + "px";
+      ax.setTransform(aDpr, 0, 0, aDpr, 0, 0);
       bx.setTransform(dpr, 0, 0, dpr, 0, 0);
       fx.setTransform(dpr, 0, 0, dpr, 0, 0);
       thread.build(W, H);
@@ -141,6 +159,11 @@ export default function HeroCanvas({
     }
     size();
     window.addEventListener("resize", size);
+    // a late web-font swap reflows the letters after our first measure — mark
+    // the centres stale so the next 30Hz tick re-reads them.
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      document.fonts.ready.then(() => { measurePending = true; });
+    }
 
     function onMove(e: PointerEvent) {
       const r = wrap.getBoundingClientRect();
@@ -155,19 +178,36 @@ export default function HeroCanvas({
     }
     if (finePointer && !reduce) window.addEventListener("pointermove", onMove, { passive: true });
 
-    function paintLetters(dt: number) {
-      // READ phase — measure every letter first (wrap rect once, no interleaved
-      // writes) so the browser does a single layout pass for the whole batch.
+    // measure every letter centre into wrap-local space, once. The values stay
+    // valid while the page scrolls (letters and wrap move together) and across
+    // modes (woven applies no wordmark transform) — only resize / reflow
+    // invalidates them, which flips measurePending back on.
+    function measureLetters() {
       const wr = wrap.getBoundingClientRect();
       for (let i = 0; i < letters.length; i++) {
         const r = letters[i].getBoundingClientRect();
         cxs[i] = r.left - wr.left + r.width / 2;
         cys[i] = r.top - wr.top + r.height / 2;
       }
-      // WRITE phase — compute warmth and paint colour (no reads here).
+    }
+
+    function paintLetters(dt: number) {
+      // dusk parallax offsets the whole wordmark; fold the same offset into the
+      // cached centres so warming stays aligned without re-reading the DOM.
+      let px = 0, py = 0;
+      if (wordmark) {
+        if (cur.parallax > 0.7 && mouse.active) {
+          px = (mouse.x / W - 0.5) * -18 * cur.parallax;
+          py = (mouse.y / H - 0.5) * -11 * cur.parallax;
+          wordmark.style.transform = `translate(${px.toFixed(2)}px, ${py.toFixed(2)}px)`;
+        } else {
+          wordmark.style.transform = "";
+        }
+      }
+
       for (let i = 0; i < letters.length; i++) {
         const l = letters[i];
-        const cx = cxs[i], cy = cys[i];
+        const cx = cxs[i] + px, cy = cys[i] + py;
 
         let w = 0;
         if (mouse.active) {
@@ -187,19 +227,6 @@ export default function HeroCanvas({
         const next = prev + (w - prev) * Math.min(1, dt * (w > prev ? 12 : 3));
         warm.set(l, next);
         l.style.color = mix(CREAM, GOLD, next);
-      }
-
-      // dusk parallax — applied to the wordmark as a whole so it never
-      // fights a per-letter intro animation running on the same elements
-      if (wordmark) {
-        let px = 0, py = 0;
-        if (cur.parallax > 0.7 && mouse.active) {
-          px = (mouse.x / W - 0.5) * -18 * cur.parallax;
-          py = (mouse.y / H - 0.5) * -11 * cur.parallax;
-          wordmark.style.transform = `translate(${px.toFixed(2)}px, ${py.toFixed(2)}px)`;
-        } else {
-          wordmark.style.transform = "";
-        }
       }
     }
 
@@ -229,12 +256,15 @@ export default function HeroCanvas({
       const p = thread.at(beadF);
       bx.save();
       bx.globalCompositeOperation = "lighter";
+      // halo via stacked translucent fills instead of shadowBlur
+      bx.globalAlpha = cur.bead * 0.22;
+      bx.fillStyle = GOLD;
+      bx.beginPath(); bx.arc(p.x, p.y, 10, 0, Math.PI * 2); bx.fill();
+      bx.globalAlpha = cur.bead * 0.5;
+      bx.beginPath(); bx.arc(p.x, p.y, 5, 0, Math.PI * 2); bx.fill();
       bx.globalAlpha = cur.bead;
-      bx.shadowColor = GOLD; bx.shadowBlur = 22;
       bx.fillStyle = "#f4e6c2";
-      bx.beginPath(); bx.arc(p.x, p.y, 3.4, 0, Math.PI * 2); bx.fill();
-      bx.shadowBlur = 0; bx.fillStyle = "rgba(201,165,92,0.25)";
-      bx.beginPath(); bx.arc(p.x, p.y, 9, 0, Math.PI * 2); bx.fill();
+      bx.beginPath(); bx.arc(p.x, p.y, 2.6, 0, Math.PI * 2); bx.fill();
       bx.restore();
     }
 
@@ -261,26 +291,45 @@ export default function HeroCanvas({
         thread.restY = introFromRestY + (cur.restY - introFromRestY) * easeOutBounce(p);
       }
 
-      if (!mouse.active) {
-        autoT += dt;
-        atmo.setLantern(
-          W * (0.5 + 0.32 * Math.sin(autoT * 0.25)),
-          H * (0.4 + 0.2 * Math.cos(autoT * 0.19))
-        );
+      // atmosphere is slow-moving (drifting motes + breathing glows) — update &
+      // repaint it at ~30Hz on its own canvas. The last frame simply persists
+      // between ticks (we don't clear it), halving the heaviest fill work.
+      atmoAcc += dt;
+      if (atmoAcc >= ATMO_DT) {
+        if (!mouse.active) {
+          autoT += atmoAcc;
+          atmo.setLantern(
+            W * (0.5 + 0.32 * Math.sin(autoT * 0.25)),
+            H * (0.4 + 0.2 * Math.cos(autoT * 0.19))
+          );
+        }
+        atmo.update(atmoAcc);
+        ax.clearRect(0, 0, W, H);
+        atmo.draw(ax);
+        atmoAcc = 0;
       }
-      atmo.update(dt);
+
+      // the strand runs at full frame rate so it stays crisp under the cursor
       thread.update(dt, mouse);
-
-      ax.clearRect(0, 0, W, H);
-      atmo.draw(ax, GOLD);
-
       bx.clearRect(0, 0, W, H);
       thread.alpha = cur.threadAlpha;
       thread.draw(bx, GOLD);
       drawBead(dt);
 
       drawWeave();
-      paintLetters(dt);
+
+      // warm the letters at ~30Hz, not every frame. Defer the first measure
+      // until the intro letters have settled (their rects move during it), then
+      // re-measure only when resize/fonts mark the centres stale.
+      warmAcc += dt;
+      if (warmAcc >= WARM_DT) {
+        if (measurePending && introT >= INTRO_DUR) {
+          measureLetters();
+          measurePending = false;
+        }
+        paintLetters(warmAcc);
+        warmAcc = 0;
+      }
     }
 
     function frame(now: number) {
@@ -308,7 +357,7 @@ export default function HeroCanvas({
       morph(1);
       for (let i = 0; i < 60; i++) thread.update(0.016, { x: 0, y: 0, active: false });
       atmo.update(0.1);
-      atmo.draw(ax, GOLD);
+      atmo.draw(ax);
       thread.draw(bx, GOLD);
       drawWeave();
       letters.forEach((l) => (l.style.color = CREAM));
