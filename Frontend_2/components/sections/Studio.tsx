@@ -17,7 +17,8 @@ export default function Studio() {
             <p className="label-mono">[ 04 / THE_STUDIO ]</p>
             <Reveal delay={0.05}>
               <h2 className="display h-xl mt-5 text-white">
-                A small team that treats your business like the product.
+                A small team that treats your business like the{" "}
+                <em className="em">product</em>.
               </h2>
             </Reveal>
             <Reveal delay={0.1}>

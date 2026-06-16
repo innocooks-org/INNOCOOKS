@@ -27,7 +27,8 @@ export default function Process() {
           <p className="label-mono">[ 03 / HOW_WE_WORK ]</p>
           <Reveal delay={0.05}>
             <h2 className="display h-xl mt-5 text-white">
-              The recipe is simple. The discipline is the point.
+              The <em className="em">recipe</em> is simple. The{" "}
+              <em className="em">discipline</em> is the <em className="em">point</em>.
             </h2>
           </Reveal>
         </div>

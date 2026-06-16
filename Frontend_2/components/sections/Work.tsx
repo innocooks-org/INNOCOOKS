@@ -136,7 +136,7 @@ export default function Work() {
           <h2 className="display h-xl mt-5 text-white">
             Built by us.
             <br />
-            Used for real.
+            Used for <em className="em">real</em>.
           </h2>
         </div>
         <span className="label-mono label-mono--ash mb-2 hidden md:block">

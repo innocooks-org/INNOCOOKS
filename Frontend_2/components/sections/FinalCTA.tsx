@@ -18,7 +18,7 @@ export default function FinalCTA() {
         </Reveal>
         <Reveal delay={0.06}>
           <h2 className="display h-hero mt-8 max-w-[16ch] text-white">
-            Tell us what&apos;s slowing your business down.
+            Tell us what&apos;s <em className="em">slowing</em> your business down.
           </h2>
         </Reveal>
         <Reveal delay={0.12}>

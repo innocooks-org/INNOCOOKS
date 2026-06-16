@@ -1,11 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  Hanken_Grotesk,
+  JetBrains_Mono,
+  Instrument_Serif,
+} from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Preloader from "@/components/Preloader";
 import SmoothScroll from "@/components/SmoothScroll";
 import Frame from "@/components/Frame";
+import ScrollSpy from "@/components/ScrollSpy";
+import Cursor from "@/components/Cursor";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -16,6 +23,14 @@ const bricolage = Bricolage_Grotesque({
 const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken" });
 
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
+
+// contrasting serif italic — used only to emphasise keywords inside headings
+const instrument = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: "italic",
+  variable: "--font-instrument",
+});
 
 export const viewport: Viewport = {
   themeColor: "#121112",
@@ -56,7 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${bricolage.variable} ${hanken.variable} ${jetbrains.variable}`}
+      className={`dark ${bricolage.variable} ${hanken.variable} ${jetbrains.variable} ${instrument.variable}`}
     >
       <body>
         <script
@@ -65,7 +80,9 @@ export default function RootLayout({
         />
         <Preloader />
         <SmoothScroll />
+        <Cursor />
         <Frame />
+        <ScrollSpy />
         <Nav />
         <main>{children}</main>
         <Footer />

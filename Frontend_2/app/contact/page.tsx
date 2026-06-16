@@ -14,7 +14,7 @@ export default function ContactPage() {
         <div>
           <p className="label-mono">[ START_A_PROJECT ]</p>
           <h1 className="display h-xl mt-6 text-white">
-            Tell us what you&apos;re trying to build.
+            Tell us what you&apos;re trying to <em className="em">build</em>.
           </h1>
           <p className="mt-7 max-w-md text-lg leading-relaxed text-ash">
             A website, an internal system, an AI workflow — or just a problem you can&apos;t

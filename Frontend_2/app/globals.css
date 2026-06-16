@@ -29,6 +29,7 @@
   --font-display: var(--font-bricolage), "Arial Narrow", sans-serif;
   --font-body: var(--font-hanken), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-em: var(--font-instrument), Georgia, serif; /* serif italic accent */
 
   /* ── motion ───────────────────────────────────────────────── */
   --ease-mech: cubic-bezier(0.16, 1, 0.3, 1); /* mechanical settle */
@@ -73,6 +74,32 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-kinetic);
   outline-offset: 2px;
+}
+
+/* ── custom cursor ─────────────────────────────────────────────
+   Native cursor is suppressed only while the custom one is active;
+   text fields keep their caret cursor for usability. */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none;
+}
+html.has-cursor input,
+html.has-cursor textarea,
+html.has-cursor select {
+  cursor: auto;
+}
+/* translate is driven by GSAP (transform); size/press use the independent
+   `scale` property so the two never fight. */
+.cursor-ring {
+  scale: 1;
+  transition: scale 0.18s var(--ease-mech), background-color 0.18s, border-width 0.18s;
+}
+.cursor-ring[data-active] {
+  scale: 1.9;
+  background: color-mix(in srgb, var(--color-kinetic) 12%, transparent);
+}
+.cursor-ring[data-press] {
+  scale: 0.8;
 }
 
 /* fine machine grain — kills the flat-black deadness, costs nothing */
@@ -121,6 +148,18 @@ body::after {
     line-height: 0.92;
     letter-spacing: -0.035em;
   }
+  /* emphasised keyword — warm serif italic against the cold grotesque caps.
+     Lowercase + slightly larger optical size makes the contrast intentional. */
+  .em {
+    font-family: var(--font-em);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    font-size: 1.06em;
+  }
+  .em-kinetic { color: var(--color-kinetic); }
+
   .h-hero { font-size: clamp(2.6rem, 8.8vw, 8.5rem); }
   .h-xl   { font-size: clamp(2.2rem, 6vw, 5rem); }
   .h-lg   { font-size: clamp(1.7rem, 3.6vw, 3rem); line-height: 0.98; letter-spacing: -0.03em; }

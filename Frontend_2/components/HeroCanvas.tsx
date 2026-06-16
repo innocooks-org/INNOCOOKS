@@ -145,11 +145,23 @@ export default function HeroCanvas() {
           const group = new THREE.Group();
           scene.add(group);
           const geo = new THREE.BoxGeometry(1, 1, 1);
-          const mat = new THREE.MeshNormalMaterial({ flatShading: true });
+          // brand-cohesive wireframe shards: mostly kinetic-orange, a few white
+          const matKinetic = new THREE.MeshBasicMaterial({
+            color: 0xc45b35,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.9,
+          });
+          const matWhite = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.45,
+          });
 
           const boxes: THREE.Mesh[] = [];
           for (let i = 0; i < 36; i++) {
-            const m = new THREE.Mesh(geo, mat);
+            const m = new THREE.Mesh(geo, i % 4 === 0 ? matWhite : matKinetic);
             m.position.set(
               (Math.random() - 0.5) * 6,
               (Math.random() - 0.5) * 6,
@@ -200,7 +212,8 @@ export default function HeroCanvas() {
             window.removeEventListener("mousemove", onMove);
             window.removeEventListener("resize", onResize);
             geo.dispose();
-            mat.dispose();
+            matKinetic.dispose();
+            matWhite.dispose();
             renderer.dispose();
             if (renderer.domElement.parentNode === host) host.removeChild(renderer.domElement);
           });

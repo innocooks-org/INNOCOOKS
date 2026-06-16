@@ -51,12 +51,9 @@ export default function Frame() {
       <span className={`${tick} bottom-2 left-2 border-b border-l`} />
       <span className={`${tick} bottom-2 right-2 border-b border-r`} />
 
-      {/* rotated edge labels (desktop only) */}
+      {/* rotated edge label — left side (right edge belongs to the scroll-spy) */}
       <span className="label-mono label-mono--ash pointer-events-none fixed left-[-0.5rem] top-1/2 z-40 hidden -translate-y-1/2 -rotate-90 whitespace-nowrap opacity-70 xl:block">
         INNOCOOKS — SYSTEMS STUDIO
-      </span>
-      <span className="label-mono label-mono--ash pointer-events-none fixed right-[-0.5rem] top-1/2 z-40 hidden -translate-y-1/2 rotate-90 whitespace-nowrap opacity-70 xl:block">
-        EST. 2024 // BASED IN INDIA
       </span>
     </div>
   );
