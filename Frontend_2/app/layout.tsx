@@ -7,7 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
+
 import Preloader from "@/components/Preloader";
 import SmoothScroll from "@/components/SmoothScroll";
 import Frame from "@/components/Frame";
@@ -115,7 +115,6 @@ export default function RootLayout({
         <main id="main" tabIndex={-1}>
           {children}
         </main>
-        <Footer />
       </body>
     </html>
   );

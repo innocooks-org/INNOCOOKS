@@ -72,6 +72,17 @@ body {
   outline-offset: 2px;
 }
 
+[data-ribbon-kw] {
+  transition: color 0.45s ease, text-shadow 0.45s ease;
+}
+
+/* Sections and footer inside ribbon-field become transparent so the SVG
+   ribbon behind them shows through the page background. */
+.ribbon-content > section,
+.ribbon-content > footer {
+  background-color: transparent !important;
+}
+
 /* keyboard skip link — off-screen until focused, then snaps into view */
 .skip-link {
   position: fixed;

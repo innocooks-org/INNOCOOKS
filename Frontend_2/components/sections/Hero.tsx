@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import Magnetic from "@/components/Magnetic";
 import HeroCanvas from "@/components/HeroCanvas";
+import LightTower from "@/components/LightTower";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -84,8 +85,8 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="hero-up absolute bottom-5 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-3 md:flex">
-        <span className="h-8 w-px animate-pulse bg-kinetic" />
+      <div className="hero-up absolute bottom-5 left-1/2 z-0 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex">
+        <LightTower />
         <span className="label-mono label-mono--ash">SCROLL</span>
       </div>
     </section>

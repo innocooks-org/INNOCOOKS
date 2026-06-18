@@ -1,4 +1,5 @@
 import Reveal from "@/components/Reveal";
+import SignalCard from "@/components/SignalCard";
 
 const team = [
   { name: "Vishnu Vardhan", role: "Frontend & design" },
@@ -18,7 +19,7 @@ export default function Studio() {
             <Reveal delay={0.05}>
               <h2 className="display h-xl mt-5 text-white">
                 A small team that treats your business like the{" "}
-                <em className="em">product</em>.
+                <em className="em em-kinetic">product</em>.
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
@@ -31,22 +32,21 @@ export default function Studio() {
           </div>
 
           <Reveal delay={0.12} className="md:col-span-5">
-            <div className="flex h-full flex-col justify-center border border-iron p-8">
-              <span className="label-mono">// SIGNAL</span>
-              <p className="display h-md mt-4 text-white">
-                One conversation <span className="text-kinetic">reaches everyone.</span>
-              </p>
-            </div>
+            <SignalCard />
           </Reveal>
         </div>
 
         {/* the five — a seam-ruled roster */}
         <Reveal delay={0.05}>
-          <ul className="mt-12 grid grid-cols-1 gap-px border border-iron bg-iron sm:grid-cols-2 lg:grid-cols-5">
+          <ul
+            className="mt-12 grid grid-cols-1 gap-px border border-iron sm:grid-cols-2 lg:grid-cols-5"
+            style={{ backgroundColor: "rgba(36,31,33,0.55)" }}
+          >
             {team.map((m, i) => (
               <li
                 key={m.role}
-                className="group flex min-h-[200px] flex-col justify-between bg-onyx p-6 transition-none hover:bg-onyx-raise"
+                className="group flex min-h-[200px] flex-col justify-between p-6 transition-none hover:bg-onyx-raise"
+                style={{ backgroundColor: "rgba(18,17,18,0.82)" }}
               >
                 <div className="flex items-start justify-between">
                   <span className="label-mono">{String(i + 1).padStart(2, "0")}</span>

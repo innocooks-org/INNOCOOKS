@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Start a project",
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
+    <>
     <section className="bg-onyx pt-24">
       <div className="container-x grid grid-cols-1 gap-14 py-20 md:grid-cols-2 md:py-28">
         <div>
@@ -39,5 +41,7 @@ export default function ContactPage() {
         <ContactForm />
       </div>
     </section>
+    <Footer />
+    </>
   );
 }

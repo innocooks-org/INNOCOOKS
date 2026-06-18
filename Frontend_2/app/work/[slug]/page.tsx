@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Reveal from "@/components/Reveal";
 import { projects, getProject } from "@/lib/projects";
+import Footer from "@/components/Footer";
 
 export const dynamicParams = false;
 
@@ -34,6 +35,7 @@ export default async function ProjectPage({
   const eyebrow = `CASE_STUDY // ${p.badge.toUpperCase().replace(/ /g, "_")}`;
 
   return (
+    <>
     <article className="bg-onyx pt-20 md:pt-24">
       {/* back / close bar */}
       <div className="container-x flex items-center justify-between border-b border-iron py-4">
@@ -161,5 +163,7 @@ export default async function ProjectPage({
         </Reveal>
       </div>
     </article>
+    <Footer />
+    </>
   );
 }

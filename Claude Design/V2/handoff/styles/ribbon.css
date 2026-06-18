@@ -1,0 +1,12 @@
+/* Add to Frontend_2/app/globals.css (or import once).
+   Only the keyword transition + reduced-motion guard live in CSS — everything
+   else is inline in RibbonField.tsx so there is no FOUC / token setup. */
+
+[data-ribbon-kw] {
+  transition: color 0.45s ease, text-shadow 0.45s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* RibbonField already detects this and renders the fully-drawn end state
+     with no scroll animation; nothing else required. */
+}

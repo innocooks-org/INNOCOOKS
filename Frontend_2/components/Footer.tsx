@@ -22,7 +22,7 @@ const cols = [
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative overflow-hidden border-t border-iron bg-onyx">
+    <footer className="relative overflow-hidden border-t border-iron">
       {/* upper: callsign + nav columns */}
       <div className="container-x relative z-10 grid grid-cols-1 gap-12 py-16 md:grid-cols-12 md:py-20">
         <div className="md:col-span-6">
@@ -67,7 +67,10 @@ export default function Footer() {
       {/* the giant watermark */}
       <div className="pointer-events-none relative flex justify-center overflow-hidden">
         <span className="display select-none whitespace-nowrap text-[24vw] leading-[0.78] text-white/[0.04]">
-          INNOCOOKS
+          INNOC
+          <span data-ribbon-end-orange="1">O</span>
+          <span data-ribbon-end-blue="1">O</span>
+          KS
         </span>
       </div>
 

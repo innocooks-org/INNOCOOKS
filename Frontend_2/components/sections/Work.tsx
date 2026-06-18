@@ -6,6 +6,10 @@ import { projects } from "@/lib/projects";
  * list used by "How we work"). Each card has a screenshot-ready visual panel
  * and opens its own case-study page; the live-site link lives inside that page. */
 
+function ProjectKeywordTitle({ title }: { title: string }) {
+  return <>{title}</>;
+}
+
 export default function Work() {
   return (
     <section id="work" className="relative scroll-mt-24 border-b border-iron bg-onyx py-24 md:py-32">
@@ -23,12 +27,16 @@ export default function Work() {
         </div>
 
         <Reveal delay={0.05}>
-          <div className="mt-12 grid gap-px border border-iron bg-iron sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            className="mt-12 grid gap-px border border-iron sm:grid-cols-2 lg:grid-cols-3"
+            style={{ backgroundColor: "rgba(36,31,33,0.55)" }}
+          >
             {projects.map((p, i) => (
               <Link
                 key={p.slug}
                 href={`/work/${p.slug}/`}
-                className="group flex flex-col bg-onyx transition-none hover:bg-onyx-raise"
+                className="group flex flex-col transition-none hover:bg-onyx-raise"
+                style={{ backgroundColor: "rgba(18,17,18,0.82)" }}
               >
                 <div className="relative aspect-[4/3] overflow-hidden border-b border-iron">
                   {p.image ? (
@@ -47,7 +55,7 @@ export default function Work() {
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <span className="display h-md relative px-6 text-center text-white/85 transition-none group-hover:text-kinetic">
-                        {p.title}
+                        <ProjectKeywordTitle title={p.title} />
                       </span>
                     </div>
                   )}

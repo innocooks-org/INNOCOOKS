@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#121112}
+  html{scroll-behavior:smooth}
+  @keyframes scrollpulse{0%,100%{opacity:1}50%{opacity:.25}}
+  ::selection{background:#c45b35;color:#121112}
+  [data-kw]{transition:color .45s ease, text-shadow .45s ease;}
+  @media (prefers-reduced-motion: reduce){.scrollline{animation:none}}
+</style>
+</helmet>
+
+<div ref="{{ setRoot }}" style="position:relative; background:#121112; color:#e6e1e2; font-family:'Hanken Grotesk',system-ui,sans-serif; overflow-x:clip;">
+
+  <!-- ===== TWO TRON LIGHT-RIBBONS — smooth curves drawn behind the text =====
+       Paths are built in JS through measured keyword centers (Catmull-Rom →
+       rounded bezier). Scroll only updates --po / --pb dash offsets. The blue
+       ribbon converts each orange keyword to blue as its head reaches it. -->
+  <svg ref="{{ setSvg }}" aria-hidden="true" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;" xmlns="http://www.w3.org/2000/svg">
+    <path ref="{{ setProbe }}" d="" fill="none" style="visibility:hidden;"></path>
+
+    <!-- ORANGE ribbon -->
+    <path data-ribbon="O" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#c45b35; stroke-width:40; stroke-opacity:calc(.05 * var(--glow,1)); stroke-dasharray:var(--lenO,99999); stroke-dashoffset:calc(var(--lenO,99999) * (1 - var(--po,0)));"></path>
+    <path data-ribbon="O" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#c45b35; stroke-width:22; stroke-opacity:calc(.10 * var(--glow,1)); stroke-dasharray:var(--lenO,99999); stroke-dashoffset:calc(var(--lenO,99999) * (1 - var(--po,0)));"></path>
+    <path data-ribbon="O" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#e8794a; stroke-width:9; stroke-opacity:calc(.24 * var(--glow,1)); stroke-dasharray:var(--lenO,99999); stroke-dashoffset:calc(var(--lenO,99999) * (1 - var(--po,0)));"></path>
+    <path data-ribbon="O" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#ff8a52; stroke-width:4; stroke-opacity:.72; stroke-dasharray:var(--lenO,99999); stroke-dashoffset:calc(var(--lenO,99999) * (1 - var(--po,0)));"></path>
+    <path data-ribbon="O" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#ffe1d2; stroke-width:1.7; stroke-opacity:1; stroke-dasharray:var(--lenO,99999); stroke-dashoffset:calc(var(--lenO,99999) * (1 - var(--po,0)));"></path>
+    <path data-ribbon="O" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#ff8a52; stroke-width:17; stroke-opacity:calc(.45 * var(--glow,1)); stroke-dasharray:64 999999; stroke-dashoffset:calc(var(--lenO,99999) * (0 - var(--po,0)));"></path>
+    <path data-ribbon="O" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#fff4ec; stroke-width:5.5; stroke-opacity:1; stroke-dasharray:30 999999; stroke-dashoffset:calc(var(--lenO,99999) * (0 - var(--po,0)));"></path>
+
+    <!-- BLUE ribbon -->
+    <path data-ribbon="B" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#1f7fb8; stroke-width:40; stroke-opacity:calc(.05 * var(--glow,1)); stroke-dasharray:var(--lenB,99999); stroke-dashoffset:calc(var(--lenB,99999) * (1 - var(--pb,0)));"></path>
+    <path data-ribbon="B" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#1f7fb8; stroke-width:22; stroke-opacity:calc(.10 * var(--glow,1)); stroke-dasharray:var(--lenB,99999); stroke-dashoffset:calc(var(--lenB,99999) * (1 - var(--pb,0)));"></path>
+    <path data-ribbon="B" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#2bb6ff; stroke-width:9; stroke-opacity:calc(.26 * var(--glow,1)); stroke-dasharray:var(--lenB,99999); stroke-dashoffset:calc(var(--lenB,99999) * (1 - var(--pb,0)));"></path>
+    <path data-ribbon="B" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#5fccff; stroke-width:4; stroke-opacity:.75; stroke-dasharray:var(--lenB,99999); stroke-dashoffset:calc(var(--lenB,99999) * (1 - var(--pb,0)));"></path>
+    <path data-ribbon="B" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#dff4ff; stroke-width:1.7; stroke-opacity:1; stroke-dasharray:var(--lenB,99999); stroke-dashoffset:calc(var(--lenB,99999) * (1 - var(--pb,0)));"></path>
+    <path data-ribbon="B" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#2bb6ff; stroke-width:17; stroke-opacity:calc(.45 * var(--glow,1)); stroke-dasharray:64 999999; stroke-dashoffset:calc(var(--lenB,99999) * (0 - var(--pb,0)));"></path>
+    <path data-ribbon="B" d="" fill="none" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke:#eaf8ff; stroke-width:5.5; stroke-opacity:1; stroke-dasharray:30 999999; stroke-dashoffset:calc(var(--lenB,99999) * (0 - var(--pb,0)));"></path>
+  </svg>
+
+  <!-- fixed machine grain -->
+  <div aria-hidden="true" style="position:fixed; inset:0; z-index:40; pointer-events:none; opacity:.045; mix-blend-mode:screen; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E&quot;);"></div>
+
+  <sc-if value="{{ showContent }}" hint-placeholder-val="{{ true }}">
+  <div style="position:relative; z-index:10;">
+
+    <!-- ============ HERO ============ -->
+    <section style="position:relative; min-height:100svh; display:flex; flex-direction:column; justify-content:flex-end; border-bottom:1px solid #241f21; padding:128px clamp(20px,5vw,64px) 96px;">
+      <div aria-hidden="true" style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(60% 50% at 78% 8%, rgba(196,91,53,.16), transparent 70%), radial-gradient(45% 40% at 10% 92%, rgba(43,182,255,.08), transparent 70%);"></div>
+      <div style="position:relative; width:100%; max-width:1440px; margin-inline:auto;">
+        <p style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; font-weight:500; color:#c45b35; margin:0 0 28px;">SYSTEMS STUDIO // COOKING INNOVATION</p>
+        <h1 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; line-height:.92; letter-spacing:-.035em; font-size:clamp(2.6rem,8.8vw,8.5rem); color:#fff; max-width:16ch; margin:0;">
+          We build the <span style="color:#c45b35;">websites, systems</span> <span style="font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; text-transform:none; letter-spacing:-.01em; color:#c45b35;">&amp;</span> <span style="color:#c45b35;">AI</span> your business runs on.
+        </h1>
+        <div style="margin-top:56px; display:flex; flex-direction:column; gap:32px; align-items:flex-start;">
+          <p style="max-width:28rem; font-size:1.125rem; line-height:1.6; color:#918b8c; margin:0;">Crafted like products, not projects. Maintained long after launch, so they keep earning their keep.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:12px;">
+            <a href="#" style="display:inline-flex; align-items:center; gap:.6rem; background:#fff; color:#121112; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:600; padding:16px 28px; border:1px solid #fff; text-decoration:none;" style-hover="display:inline-flex; align-items:center; gap:.6rem; background:#c45b35; color:#121112; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:600; padding:16px 28px; border:1px solid #c45b35; text-decoration:none;">Start a project <span aria-hidden="true">→</span></a>
+            <a href="#" style="display:inline-flex; align-items:center; gap:.6rem; background:transparent; color:#fff; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:500; padding:16px 28px; border:1px solid rgba(255,255,255,.35); text-decoration:none;" style-hover="display:inline-flex; align-items:center; gap:.6rem; background:#2bb6ff; color:#121112; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:500; padding:16px 28px; border:1px solid #2bb6ff; text-decoration:none;">See the work</a>
+          </div>
+        </div>
+      </div>
+      <!-- SCROLL indicator — origin of the ribbons -->
+      <div data-origin="1" style="position:absolute; bottom:28px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:12px;">
+        <span class="scrollline" style="display:block; height:32px; width:1px; background:#c45b35; animation:scrollpulse 1.6s ease-in-out infinite;"></span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:#918b8c;">SCROLL</span>
+      </div>
+    </section>
+
+    <!-- ============ MANIFESTO ============ -->
+    <section style="position:relative; min-height:80vh; display:flex; align-items:center; border-bottom:1px solid #241f21; padding:clamp(80px,12vh,160px) clamp(20px,5vw,64px);">
+      <div style="width:100%; max-width:1440px; margin-inline:auto;">
+        <p style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; font-weight:500; color:#c45b35; margin:0 0 40px;">01 — MANIFESTO</p>
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; line-height:.98; letter-spacing:-.03em; font-size:clamp(1.7rem,5vw,3.6rem); color:#e6e1e2; max-width:20ch; margin:0;">
+          We don't ship projects. We engineer <span data-kw style="font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; text-transform:none; color:#c45b35; font-size:1.06em;">systems</span> that <span data-kw style="color:#c45b35;">compound</span> — long after the launch.
+        </h2>
+      </div>
+    </section>
+
+    <!-- ============ WORK (index) ============ -->
+    <section style="position:relative; min-height:110vh; display:flex; flex-direction:column; justify-content:center; border-bottom:1px solid #241f21; padding:clamp(80px,12vh,160px) clamp(20px,5vw,64px);">
+      <div style="width:100%; max-width:1440px; margin-inline:auto;">
+        <p style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; font-weight:500; color:#c45b35; margin:0 0 48px;">02 — SELECTED WORK</p>
+        <div style="border-top:1px solid #241f21;">
+          <a href="#" style="display:grid; grid-template-columns:64px 1fr auto; align-items:baseline; gap:24px; padding:32px 4px; border-bottom:1px solid #241f21; text-decoration:none; color:#e6e1e2;" style-hover="display:grid; grid-template-columns:64px 1fr auto; align-items:baseline; gap:24px; padding:32px 4px; border-bottom:1px solid #241f21; text-decoration:none; color:#fff; background:#1a1819;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#5b5557;">01</span>
+            <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:-.02em; font-size:clamp(1.5rem,3.4vw,2.6rem); line-height:1;"><span data-kw style="color:#c45b35;">Christalin</span> Mirrors</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#918b8c;">E-Commerce · 2024</span>
+          </a>
+          <a href="#" style="display:grid; grid-template-columns:64px 1fr auto; align-items:baseline; gap:24px; padding:32px 4px; border-bottom:1px solid #241f21; text-decoration:none; color:#e6e1e2;" style-hover="display:grid; grid-template-columns:64px 1fr auto; align-items:baseline; gap:24px; padding:32px 4px; border-bottom:1px solid #241f21; text-decoration:none; color:#fff; background:#1a1819;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#5b5557;">02</span>
+            <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:-.02em; font-size:clamp(1.5rem,3.4vw,2.6rem); line-height:1;"><span data-kw style="color:#c45b35;">Northwind</span> Ops</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#918b8c;">Internal Tooling · 2024</span>
+          </a>
+          <a href="#" style="display:grid; grid-template-columns:64px 1fr auto; align-items:baseline; gap:24px; padding:32px 4px; border-bottom:1px solid #241f21; text-decoration:none; color:#e6e1e2;" style-hover="display:grid; grid-template-columns:64px 1fr auto; align-items:baseline; gap:24px; padding:32px 4px; border-bottom:1px solid #241f21; text-decoration:none; color:#fff; background:#1a1819;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#5b5557;">03</span>
+            <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:-.02em; font-size:clamp(1.5rem,3.4vw,2.6rem); line-height:1;"><span data-kw style="color:#c45b35;">Atlas</span> Booking</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#918b8c;">AI Scheduling · 2023</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROCESS ============ -->
+    <section style="position:relative; min-height:100vh; display:flex; flex-direction:column; justify-content:center; border-bottom:1px solid #241f21; padding:clamp(80px,12vh,160px) clamp(20px,5vw,64px);">
+      <div style="width:100%; max-width:1440px; margin-inline:auto;">
+        <p style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; font-weight:500; color:#c45b35; margin:0 0 64px;">03 — HOW WE WORK</p>
+        <div style="display:grid; gap:0;">
+          <div style="display:grid; grid-template-columns:120px 1fr; gap:clamp(16px,4vw,64px); padding:40px 0; border-top:1px solid #241f21;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.1em; color:#c45b35;">/01</span>
+            <div>
+              <h3 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:-.02em; font-size:clamp(1.4rem,3vw,2.2rem); margin:0 0 12px;"><span data-kw style="color:#c45b35;">Map</span></h3>
+              <p style="max-width:42ch; font-size:1.05rem; line-height:1.6; color:#918b8c; margin:0;">We trace the system before we touch a pixel — the data, the edges, the people who run it.</p>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:120px 1fr; gap:clamp(16px,4vw,64px); padding:40px 0; border-top:1px solid #241f21;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.1em; color:#c45b35;">/02</span>
+            <div>
+              <h3 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:-.02em; font-size:clamp(1.4rem,3vw,2.2rem); margin:0 0 12px;"><span data-kw style="color:#c45b35;">Build</span></h3>
+              <p style="max-width:42ch; font-size:1.05rem; line-height:1.6; color:#918b8c; margin:0;">Engineered in tight loops — shipped in weeks, not quarters, with you in the room.</p>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:120px 1fr; gap:clamp(16px,4vw,64px); padding:40px 0; border-top:1px solid #241f21; border-bottom:1px solid #241f21;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.1em; color:#c45b35;">/03</span>
+            <div>
+              <h3 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:-.02em; font-size:clamp(1.4rem,3vw,2.2rem); margin:0 0 12px;"><span data-kw style="color:#c45b35;">Maintain</span></h3>
+              <p style="max-width:42ch; font-size:1.05rem; line-height:1.6; color:#918b8c; margin:0;">The relationship doesn't end at launch. We keep the system sharp as the business moves.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section style="position:relative; min-height:70vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; border-bottom:1px solid #241f21; padding:clamp(80px,12vh,160px) clamp(20px,5vw,64px);">
+      <p style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; font-weight:500; color:#c45b35; margin:0 0 32px;">04 — START</p>
+      <h2 style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; line-height:.92; letter-spacing:-.035em; font-size:clamp(2.2rem,6vw,5rem); color:#fff; max-width:18ch; margin:0 0 48px;">
+        Let's build something that <span data-kw style="font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; text-transform:none; color:#c45b35; font-size:1.04em;">lasts</span>.
+      </h2>
+      <a href="#" style="display:inline-flex; align-items:center; gap:.6rem; background:#fff; color:#121112; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:600; padding:18px 32px; border:1px solid #fff; text-decoration:none;" style-hover="display:inline-flex; align-items:center; gap:.6rem; background:#2bb6ff; color:#121112; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:600; padding:18px 32px; border:1px solid #2bb6ff; text-decoration:none;">Start a project <span aria-hidden="true">→</span></a>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer style="position:relative; min-height:40vh; display:flex; flex-direction:column; justify-content:flex-end; padding:clamp(48px,8vh,96px) clamp(20px,5vw,64px) 48px;">
+      <div style="width:100%; max-width:1440px; margin-inline:auto;">
+        <div style="display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between; align-items:flex-end; padding-bottom:48px; border-bottom:1px solid #241f21;">
+          <div data-end="1" style="font-family:'Bricolage Grotesque',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:-.03em; font-size:clamp(2rem,5vw,3.4rem); color:#fff; line-height:.9;">InnoCooks</div>
+          <div style="display:flex; gap:48px; flex-wrap:wrap;">
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5b5557;">Studio</span>
+              <a href="#" style="color:#e6e1e2; text-decoration:none; font-size:.95rem;">Work</a>
+              <a href="#" style="color:#e6e1e2; text-decoration:none; font-size:.95rem;">Process</a>
+              <a href="#" style="color:#e6e1e2; text-decoration:none; font-size:.95rem;">Contact</a>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5b5557;">Connect</span>
+              <a href="#" style="color:#e6e1e2; text-decoration:none; font-size:.95rem;">Email</a>
+              <a href="#" style="color:#e6e1e2; text-decoration:none; font-size:.95rem;">LinkedIn</a>
+              <a href="#" style="color:#e6e1e2; text-decoration:none; font-size:.95rem;">GitHub</a>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; padding-top:24px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#5b5557;">
+          <span>© 2025 InnoCooks — Systems Studio</span>
+          <span>Built on the Grid</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1440, &quot;height&quot;: 1024},
+  &quot;intensity&quot;: {&quot;editor&quot;: &quot;float&quot;, &quot;default&quot;: 1, &quot;min&quot;: 0.6, &quot;max&quot;: 1.6, &quot;step&quot;: 0.05, &quot;tsType&quot;: &quot;number&quot;},
+  &quot;showContent&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this.reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.ORANGE = '#c45b35';
+    this.BLUE = '#2bb6ff';
+    this.nodeProg = [];      // [{el, p}] blue progress threshold per keyword
+    this.flipState = [];     // last applied color state
+    this.ticking = false;
+    this.tick = () => { this.ticking = false; this.update(); };
+    this.onScroll = () => { if (!this.ticking) { this.ticking = true; requestAnimationFrame(this.tick); } };
+
+    this.measure();
+    if (this.reduce) {
+      this.setVars(1, 1);
+      this.applyFlips(1);
+    } else {
+      window.addEventListener('scroll', this.onScroll, { passive: true, capture: true });
+      window.addEventListener('resize', this.onResize, { passive: true });
+      this.update();
+    }
+    // re-measure once fonts settle (layout shifts the keyword centers)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => { this.measure(); this.update(); });
+    }
+    this._t1 = setTimeout(() => { this.measure(); this.update(); }, 400);
+  }
+
+  onResize = () => { this.measure(); this.update(); };
+
+  componentDidUpdate() { this.measure(); if (this.reduce) { this.setVars(1,1); this.applyFlips(1); } else this.update(); }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll, { capture: true });
+    window.removeEventListener('resize', this.onResize);
+    clearTimeout(this._t1);
+  }
+
+  setVars(po, pb) {
+    const el = this.svgEl; if (!el) return;
+    el.style.setProperty('--po', po.toFixed(4));
+    el.style.setProperty('--pb', pb.toFixed(4));
+    el.style.setProperty('--glow', String(this.props.intensity ?? 1));
+  }
+
+  // Catmull-Rom through pts -> rounded cubic bezier path. Records the partial
+  // path string at each keyword node so we can derive its length fraction.
+  buildPath(pts) {
+    if (pts.length < 2) return { d: '', snaps: [] };
+    let d = 'M ' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
+    const snaps = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      const c1x = p1.x + (p2.x - p0.x) / 6, c1y = p1.y + (p2.y - p0.y) / 6;
+      const c2x = p2.x - (p3.x - p1.x) / 6, c2y = p2.y - (p3.y - p1.y) / 6;
+      d += ' C ' + c1x.toFixed(1) + ' ' + c1y.toFixed(1) + ' ' + c2x.toFixed(1) + ' ' + c2y.toFixed(1) + ' ' + p2.x.toFixed(1) + ' ' + p2.y.toFixed(1);
+      if (p2.node) snaps.push({ el: p2.el, d: d });
+    }
+    return { d, snaps };
+  }
+
+  // build a point list: origin -> (margin waypoint -> keyword)* -> end
+  pointsFor(origin, nodes, end, W, startLeft) {
+    const pts = [{ x: origin.x, y: origin.y }];
+    let left = startLeft;
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      const prev = pts[pts.length - 1];
+      if (n.y - prev.y > 280) {
+        pts.push({ x: left ? W * 0.13 : W * 0.87, y: (prev.y + n.y) / 2 });
+        left = !left;
+      }
+      pts.push({ x: n.x, y: n.y, node: true, el: n.el });
+    }
+    pts.push({ x: end.x, y: end.y });
+    return pts;
+  }
+
+  center(el, rootRect) {
+    const r = el.getBoundingClientRect();
+    return { x: r.left - rootRect.left + r.width / 2, y: r.top - rootRect.top + r.height / 2, el };
+  }
+
+  measure() {
+    const root = this.rootEl, svg = this.svgEl, probe = this.probeEl;
+    if (!root || !svg || !probe) return;
+    const W = root.clientWidth, H = root.scrollHeight;
+    if (!W || !H) return;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    const rootRect = root.getBoundingClientRect();
+
+    const originEl = root.querySelector('[data-origin]');
+    const endEl = root.querySelector('[data-end]');
+    const kwEls = Array.prototype.slice.call(root.querySelectorAll('[data-kw]'));
+    if (!originEl || !kwEls.length) return;
+
+    const origin = this.center(originEl, rootRect);
+    const end = endEl ? this.center(endEl, rootRect) : { x: W / 2, y: H };
+    const nodes = kwEls.map((el) => this.center(el, rootRect)).sort((a, b) => a.y - b.y);
+
+    const oPath = this.buildPath(this.pointsFor(origin, nodes, end, W, true));
+    const bPath = this.buildPath(this.pointsFor(origin, nodes, end, W, false));
+
+    svg.querySelectorAll('[data-ribbon="O"]').forEach((p) => p.setAttribute('d', oPath.d));
+    svg.querySelectorAll('[data-ribbon="B"]').forEach((p) => p.setAttribute('d', bPath.d));
+
+    const lenOf = (d) => { probe.setAttribute('d', d); try { return probe.getTotalLength(); } catch (e) { return 0; } };
+    const totalO = lenOf(oPath.d), totalB = lenOf(bPath.d);
+    svg.style.setProperty('--lenO', String(Math.ceil(totalO || 99999)));
+    svg.style.setProperty('--lenB', String(Math.ceil(totalB || 99999)));
+
+    // blue progress threshold at each keyword (a touch before the head fully
+    // arrives, so the flip lands as the wall sweeps over the word)
+    this.nodeProg = bPath.snaps.map((s) => ({ el: s.el, p: totalB ? Math.max(0, lenOf(s.d) / totalB - 0.012) : 1 }));
+    this.flipState = this.nodeProg.map(() => null);
+  }
+
+  applyFlips(pb) {
+    for (let i = 0; i < this.nodeProg.length; i++) {
+      const on = pb >= this.nodeProg[i].p;
+      if (this.flipState[i] === on) continue;
+      this.flipState[i] = on;
+      const el = this.nodeProg[i].el;
+      if (on) { el.style.color = this.BLUE; el.style.textShadow = '0 0 22px rgba(43,182,255,.55)'; }
+      else { el.style.color = this.ORANGE; el.style.textShadow = 'none'; }
+    }
+  }
+
+  update() {
+    const se = document.scrollingElement || document.documentElement;
+    const denom = (se.scrollHeight - se.clientHeight) || 1;
+    const top = se.scrollTop || window.scrollY || window.pageYOffset || 0;
+    const g = Math.max(0, Math.min(1, top / denom));
+    const po = g;                                       // orange leads
+    const pb = Math.max(0, Math.min(1, (g - 0.05) / 0.9)); // blue follows + converts
+    this.setVars(po, pb);
+    this.applyFlips(pb);
+  }
+
+  renderVals() {
+    return {
+      setRoot: (el) => { this.rootEl = el; },
+      setSvg: (el) => { this.svgEl = el; },
+      setProbe: (el) => { this.probeEl = el; },
+      showContent: this.props.showContent ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>

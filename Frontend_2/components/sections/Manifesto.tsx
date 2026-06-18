@@ -12,10 +12,13 @@ const SENTENCE =
   "We build the websites that turn visitors into customers, the systems that end your spreadsheet chaos, the AI that handles the repetitive thinking, and the automation that runs the busywork itself.";
 
 const KEYS = new Set(["websites", "systems", "ai", "automation"]);
-const WORDS = SENTENCE.split(" ").map((w) => ({
-  w,
-  key: KEYS.has(w.replace(/[^A-Za-z]/g, "").toLowerCase()),
-}));
+// alternate between ribbons so they diverge through the Manifesto block
+const SIDE: Record<string, "O" | "B"> = { websites: "O", systems: "B", ai: "B", automation: "O" };
+const WORDS = SENTENCE.split(" ").map((w) => {
+  const clean = w.replace(/[^A-Za-z]/g, "").toLowerCase();
+  const key = KEYS.has(clean);
+  return { w, key, side: key ? SIDE[clean] : undefined };
+});
 
 const INDEX = ["Websites", "Systems", "AI", "Automation"];
 
@@ -64,9 +67,12 @@ export default function Manifesto() {
               className="display max-w-[24ch] text-[clamp(1.7rem,3.6vw,3rem)] leading-[1.08] tracking-tight text-white"
               style={{ textTransform: "none" }}
             >
-              {WORDS.map(({ w, key }, i) => (
+              {WORDS.map(({ w, key, side }, i) => (
                 <Fragment key={i}>
-                  <span className={`mf-word inline-block ${key ? "text-kinetic" : "text-white"}`}>
+                  <span
+                    data-ribbon-kw={key ? side : undefined}
+                    className={`mf-word inline-block ${key ? "text-kinetic" : "text-white"}`}
+                  >
                     {w}
                   </span>
                   {i < WORDS.length - 1 ? " " : null}
@@ -78,11 +84,15 @@ export default function Manifesto() {
 
         {/* the four capabilities — a full-width, evenly-split index row */}
         <Reveal delay={0.05}>
-          <ul className="mt-14 grid grid-cols-2 gap-px border border-iron bg-iron sm:grid-cols-4 md:mt-20">
+          <ul
+            className="mt-14 grid grid-cols-2 gap-px border border-iron sm:grid-cols-4 md:mt-20"
+            style={{ backgroundColor: "rgba(36,31,33,0.55)" }}
+          >
             {INDEX.map((label, i) => (
               <li
                 key={label}
-                className="flex items-baseline gap-3 bg-onyx px-5 py-7 transition-none hover:bg-onyx-raise"
+                className="flex items-baseline gap-3 px-5 py-7 transition-none hover:bg-onyx-raise"
+                style={{ backgroundColor: "rgba(18,17,18,0.82)" }}
               >
                 <span className="label-mono">{String(i + 1).padStart(2, "0")}</span>
                 <span className="display h-md text-white">{label}</span>

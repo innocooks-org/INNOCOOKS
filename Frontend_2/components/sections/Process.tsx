@@ -19,6 +19,17 @@ const steps = [
   },
 ];
 
+function StepTitle({ name }: { name: string }) {
+  if (name === "Serve & maintain") {
+    return (
+      <span className="text-kinetic">
+        Serve &amp; <span data-ribbon-kw>maintain</span>
+      </span>
+    );
+  }
+  return <span className="text-kinetic">{name}</span>;
+}
+
 export default function Process() {
   return (
     <section id="process" className="relative scroll-mt-24 border-b border-iron bg-onyx py-24 md:py-32">
@@ -41,7 +52,7 @@ export default function Process() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="display h-lg col-span-1 text-white transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2 md:col-span-5">
-                  {s.name}
+                  <StepTitle name={s.name} />
                 </h3>
                 <p className="col-span-1 max-w-md text-base leading-relaxed text-ash md:col-span-6">
                   {s.copy}
