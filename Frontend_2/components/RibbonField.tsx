@@ -172,6 +172,11 @@ export default function RibbonField({
       const sH = se.scrollHeight;
       const vH = se.clientHeight || window.innerHeight;
       const sTop = Math.max(0, se.scrollTop || window.scrollY || 0);
+      
+      if (sTop > 5 && root) {
+        root.classList.add("is-scrolled");
+      }
+
       // raw 0→1 = raw scroll fraction
       const raw = Math.min(1, sTop / (sH - vH || 1));
       // footer boost: kicks in around the FinalCTA / "slowing" keyword,
@@ -306,6 +311,7 @@ export default function RibbonField({
     <div ref={rootRef} className="ribbon-field" style={{ position: "relative" }}>
       <svg
         ref={svgRef}
+        className="ribbon-svg"
         aria-hidden="true"
         preserveAspectRatio="none"
         style={{
