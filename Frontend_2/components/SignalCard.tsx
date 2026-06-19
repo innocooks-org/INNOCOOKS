@@ -37,10 +37,11 @@ export default function SignalCard() {
       const ribbonTop = ribbonField.getBoundingClientRect().top + window.scrollY;
       const cardTop = card.getBoundingClientRect().top + window.scrollY;
       
-      // Delay backspace until the ribbon is further down the card (near the text)
-      const cardEnterInField = cardTop - ribbonTop + card.offsetHeight * 0.45;
-      // Delay typing until the ribbon crosses the text completely
-      const cardCrossInField = cardTop - ribbonTop + card.offsetHeight * 0.8;
+      // Begin the backspace sequence when the ribbon is near the top of the card
+      const cardEnterInField = cardTop - ribbonTop + card.offsetHeight * 0.2;
+      // Guarantee a minimum of 400px of scrolling for the typing to feel mechanical and readable,
+      // regardless of how physically small the card is on mobile screens.
+      const cardCrossInField = cardEnterInField + Math.max(card.offsetHeight * 0.8, 400);
       
       const rawEnter = Math.min(0.92, Math.max(0, cardEnterInField / fieldH));
       const rawHit = Math.min(0.92, Math.max(0, cardCrossInField / fieldH));

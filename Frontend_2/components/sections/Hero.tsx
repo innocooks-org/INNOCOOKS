@@ -45,7 +45,7 @@ export default function Hero() {
   return (
     <section
       ref={root}
-      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden border-b border-iron px-5 pb-16 pt-32 md:px-16 md:pb-24"
+      className="relative flex min-h-screen flex-col justify-center md:justify-end overflow-hidden border-b border-iron px-5 pb-28 pt-24 md:px-16 md:pb-24 md:pt-32"
     >
       <div className="ember-field" aria-hidden="true" />
       <HeroCanvas />
@@ -85,7 +85,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="hero-up absolute bottom-5 left-1/2 z-0 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex">
+      <div className="hero-up absolute bottom-5 left-1/2 z-0 flex -translate-x-1/2 flex-col items-center gap-2">
         <LightTower />
         <span className="label-mono label-mono--ash">SCROLL</span>
       </div>
