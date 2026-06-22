@@ -26,6 +26,12 @@ export default function Footer() {
       {/* upper: callsign + nav columns */}
       <div className="container-x relative z-10 grid grid-cols-1 gap-12 py-16 md:grid-cols-12 md:py-20">
         <div className="md:col-span-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/android-chrome-512x512-background-removed.png"
+            alt="InnoCooks"
+            className="mb-5 h-14 w-auto brightness-0 invert"
+          />
           <p className="display h-md text-white">
             INNO<span className="text-kinetic">COOKS</span>
           </p>

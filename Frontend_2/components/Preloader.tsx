@@ -53,8 +53,24 @@ export default function Preloader() {
       className="fixed inset-0 z-[100] flex flex-col justify-between bg-onyx px-5 py-5 md:px-16 md:py-8"
     >
       <div className="pre-fade flex items-center justify-between">
-        <span className="label-mono label-mono--ash">INNOCOOKS // SYSTEMS_STUDIO</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/android-chrome-512x512-background-removed.png"
+          alt="InnoCooks"
+          className="h-8 w-auto brightness-0 invert"
+        />
         <span className="label-mono label-mono--ash">BOOT_SEQUENCE</span>
+      </div>
+
+      {/* centred ghost logo — fades out with the rest */}
+      <div className="pre-fade flex flex-1 items-center justify-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/android-chrome-512x512-background-removed.png"
+          alt=""
+          aria-hidden="true"
+          className="w-36 brightness-0 invert opacity-15 md:w-48"
+        />
       </div>
 
       <div className="pre-fade flex items-end justify-between">

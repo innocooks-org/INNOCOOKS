@@ -80,6 +80,14 @@ export default function Nav() {
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
+        <div className="flex items-center border-b border-iron px-5 py-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/android-chrome-512x512-background-removed.png"
+            alt="InnoCooks"
+            className="h-9 w-auto brightness-0 invert"
+          />
+        </div>
         <ul className="flex flex-1 flex-col justify-center gap-2 px-5">
           {links.map((l) => (
             <li key={l.href} className="border-b border-iron py-3">
