@@ -86,10 +86,11 @@ export async function POST(req: NextRequest) {
   // ── Send via EmailJS REST API ─────────────────────────────────────────────
   // Keys live in server-only env vars (no NEXT_PUBLIC_ prefix) — they never
   // reach the browser bundle.
-  const serviceId  = process.env.EMAILJS_SERVICE_ID   ?? "";
-  const templateId = process.env.EMAILJS_TEMPLATE_ID  ?? "";
-  const publicKey  = process.env.EMAILJS_PUBLIC_KEY   ?? "";
-  const privateKey = process.env.EMAILJS_PRIVATE_KEY  ?? "";
+  const serviceId        = process.env.EMAILJS_SERVICE_ID          ?? "";
+  const templateId       = process.env.EMAILJS_TEMPLATE_ID         ?? ""; // auto-reply → client
+  const notifyTemplateId = process.env.EMAILJS_NOTIFY_TEMPLATE_ID  ?? ""; // notification → team
+  const publicKey        = process.env.EMAILJS_PUBLIC_KEY          ?? "";
+  const privateKey       = process.env.EMAILJS_PRIVATE_KEY         ?? "";
 
   if (!serviceId || !publicKey) {
     console.error("[contact] EmailJS env vars not set.");
@@ -99,25 +100,42 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  try {
-    const ejsRes = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+  // Helper: fire a single EmailJS template call
+  async function sendTemplate(tid: string): Promise<Response> {
+    return fetch("https://api.emailjs.com/api/v1.0/email/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         service_id:      serviceId,
-        template_id:     templateId,
+        template_id:     tid,
         user_id:         publicKey,
         accessToken:     privateKey,
         template_params: { name, email, business, budget, message },
       }),
     });
+  }
 
-    if (!ejsRes.ok) {
-      console.error("[contact] EmailJS returned", ejsRes.status, await ejsRes.text());
-      return NextResponse.json(
-        { error: "Could not send your message. Please try again." },
-        { status: 502 }
-      );
+  try {
+    // Fire both templates in parallel:
+    //   templateId       → auto-reply to client   (To: {{email}})
+    //   notifyTemplateId → team notification       (To: innocooks@gmail.com, Reply-To: {{email}})
+    const promises: Promise<Response>[] = [sendTemplate(templateId)];
+    if (notifyTemplateId) {
+      promises.push(sendTemplate(notifyTemplateId));
+    } else {
+      console.warn("[contact] EMAILJS_NOTIFY_TEMPLATE_ID not set — team notification skipped.");
+    }
+
+    const results = await Promise.all(promises);
+
+    for (const res of results) {
+      if (!res.ok) {
+        console.error("[contact] EmailJS returned", res.status, await res.text());
+        return NextResponse.json(
+          { error: "Could not send your message. Please try again." },
+          { status: 502 }
+        );
+      }
     }
   } catch (err) {
     console.error("[contact] EmailJS fetch failed:", err);
