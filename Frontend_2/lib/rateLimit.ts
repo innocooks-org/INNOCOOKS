@@ -1,4 +1,4 @@
-/* Client-side rate limit — localStorage-backed, survives tab changes and
+/* Client-side rate limit - localStorage-backed, survives tab changes and
    browser restarts. Max 3 submissions per 24 hours per browser/device.
    The server does a parallel IP-based check; these two layers work together. */
 
@@ -34,5 +34,5 @@ export function logClientSubmit(): void {
   try {
     const recent = getLog();
     localStorage.setItem(STORE_KEY, JSON.stringify([...recent, Date.now()]));
-  } catch { /* ignore — storage unavailable */ }
+  } catch { /* ignore - storage unavailable */ }
 }

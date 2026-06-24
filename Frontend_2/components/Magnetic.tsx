@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 
-/** Magnetic wrapper — the child leans toward the cursor and settles back on
+/** Magnetic wrapper - the child leans toward the cursor and settles back on
  *  leave. Desktop pointer only; inert on touch and under reduced-motion. */
 export default function Magnetic({
   children,

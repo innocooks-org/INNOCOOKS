@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const next = [
-  { n: "01", body: "We read what you've sent — no interns, no bots." },
+  { n: "01", body: "We read what you've sent. No interns, no bots." },
   { n: "02", body: "We come back with a considered response, not a pitch deck." },
   { n: "03", body: "If it's a fit, we shape the brief together before any work starts." },
 ];

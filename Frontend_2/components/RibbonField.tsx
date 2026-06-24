@@ -262,13 +262,13 @@ export default function RibbonField({
       vectorEffect: "non-scaling-stroke" as const,
     };
     const specs = [
-      // ── smooth Gaussian glow falloff — 6 layers wide→tight ──
+      // ── smooth Gaussian glow falloff - 6 layers wide→tight ──
       base(64, c.glow, "calc(.020 * var(--glow,1))"),   // far ambient
       base(44, c.glow, "calc(.038 * var(--glow,1))"),
       base(28, c.glow, "calc(.068 * var(--glow,1))"),
       base(16, c.mid,  "calc(.115 * var(--glow,1))"),
       base(10, c.mid,  "calc(.200 * var(--glow,1))"),
-      // ── dark edge shadow — Tron inner/outer-edge look ────────
+      // ── dark edge shadow - Tron inner/outer-edge look ────────
       base(8,  c.edge, "0.42"),
       // ── ribbon body ──────────────────────────────────────────
       base(4.5,c.core, "0.78"),

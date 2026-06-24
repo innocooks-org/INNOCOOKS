@@ -1,26 +1,26 @@
 @import "tailwindcss";
 
 /* ════════════════════════════════════════════════════════════════════════
-   INNOCOOKS · v2 — "INDUSTRIAL KINETIC"
+   INNOCOOKS · v2 - "INDUSTRIAL KINETIC"
    Deep onyx void · stark white type · a single kinetic-orange signal.
    Swiss precision meets digital brutalism. Zero radius. Hairline seams.
    ════════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
   /* ── surfaces ─────────────────────────────────────────────── */
-  --color-onyx: #121112; /* the void — page background */
+  --color-onyx: #121112; /* the void - page background */
   --color-onyx-raise: #1a1819; /* lifted containers / hover floors */
   --color-iron: #241f21; /* structural fills + hairline borders */
   --color-iron-bright: #34302f;
 
   /* ── ink ──────────────────────────────────────────────────── */
-  --color-white: #ffffff; /* stark white — max contrast type */
+  --color-white: #ffffff; /* stark white - max contrast type */
   --color-bone: #e6e1e2; /* default body ink (softened white) */
   --color-ash: #918b8c; /* secondary / metadata ink */
   --color-ash-dim: #5b5557;
 
   /* ── signal ───────────────────────────────────────────────── */
-  --color-kinetic: #c45b35; /* THE accent — burnt industrial orange */
+  --color-kinetic: #c45b35; /* THE accent - burnt industrial orange */
   --color-kinetic-bright: #e17149;
   --color-ember: #ff7a4d; /* glow highlight */
   --color-signal: #ff210f; /* high-alert, used almost never */
@@ -98,7 +98,7 @@ body {
   to { opacity: 1; }
 }
 
-/* keyboard skip link — off-screen until focused, then snaps into view */
+/* keyboard skip link - off-screen until focused, then snaps into view */
 .skip-link {
   position: fixed;
   top: 0;
@@ -157,7 +157,7 @@ html.has-cursor select {
   scale: 0.8;
 }
 
-/* fine machine grain — kills the flat-black deadness, costs nothing */
+/* fine machine grain - kills the flat-black deadness, costs nothing */
 body::after {
   content: "";
   position: fixed;
@@ -190,7 +190,7 @@ body::after {
     }
   }
 
-  /* fixed nav bar — same visual padding as before, but the floors give way to
+  /* fixed nav bar - same visual padding as before, but the floors give way to
      the notch/rounded-corner safe areas when they're larger (viewport-fit:cover) */
   .nav-safe {
     padding-top: max(0.75rem, env(safe-area-inset-top));
@@ -207,7 +207,7 @@ body::after {
     }
   }
 
-  /* technical micro-label — the "machine-read" voice */
+  /* technical micro-label - the "machine-read" voice */
   .label-mono {
     font-family: var(--font-mono);
     font-size: 0.72rem;
@@ -218,7 +218,7 @@ body::after {
   }
   .label-mono--ash { color: var(--color-ash); }
 
-  /* ── DISPLAY TYPE — Bricolage, dense, overwhelming scale ── */
+  /* ── DISPLAY TYPE - Bricolage, dense, overwhelming scale ── */
   .display {
     font-family: var(--font-display);
     font-weight: 800;
@@ -226,7 +226,7 @@ body::after {
     line-height: 0.92;
     letter-spacing: -0.035em;
   }
-  /* emphasised keyword — warm serif italic against the cold grotesque caps.
+  /* emphasised keyword - warm serif italic against the cold grotesque caps.
      Lowercase + slightly larger optical size makes the contrast intentional. */
   .em {
     font-family: var(--font-em);
@@ -243,7 +243,7 @@ body::after {
   .h-lg   { font-size: clamp(1.7rem, 3.6vw, 3rem); line-height: 0.98; letter-spacing: -0.03em; }
   .h-md   { font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1; letter-spacing: -0.02em; }
 
-  /* ── BUTTONS — hard edges, instant "machine" colour flip ── */
+  /* ── BUTTONS - hard edges, instant "machine" colour flip ── */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -286,13 +286,13 @@ body::after {
     border-color: var(--color-kinetic);
   }
 
-  /* hairline rule — define regions with structure, not whitespace */
+  /* hairline rule - define regions with structure, not whitespace */
   .seam { border-color: var(--color-iron); }
 
   .no-scrollbar { scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* ── mechanical reveal — content rises out of a hard-edged mask ── */
+  /* ── mechanical reveal - content rises out of a hard-edged mask ── */
   .mask-rise { overflow: hidden; }
   .mask-rise > * { display: block; }
 

@@ -10,7 +10,7 @@ export default function FinalCTA() {
       id="start"
       className="relative flex min-h-[90svh] flex-col items-center justify-center overflow-hidden bg-onyx px-5 py-28 text-center md:px-16"
     >
-      {/* Ribbon terminus — both ribbons converge here */}
+      {/* Ribbon terminus - both ribbons converge here */}
       <span
         data-ribbon-end
         aria-hidden="true"

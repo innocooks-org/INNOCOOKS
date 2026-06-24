@@ -4,15 +4,12 @@ import { useRef, useState } from "react";
 import { contactMailto, validateContact, type ContactPayload } from "@/lib/contact";
 import { clientRateCheck, logClientSubmit } from "@/lib/rateLimit";
 
-const budgets = ["Under ₹25K", "₹25K–₹75K", "₹75K–₹2L", "Let's discuss"];
-
 type Status = "idle" | "submitting" | "success" | "error";
 
 export default function ContactForm() {
-  const [budget, setBudget]   = useState("");
   const [status, setStatus]   = useState<Status>("idle");
   const [message, setMessage] = useState("");
-  // Track when the form was mounted — submitted too fast = bot signal
+  // Track when the form was mounted - submitted too fast = bot signal
   const openedAt    = useRef(Date.now());
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -29,10 +26,10 @@ export default function ContactForm() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    // Honeypot — bots fill it, humans don't see it
+    // Honeypot - bots fill it, humans don't see it
     if ((data.get("company_website") as string)?.trim()) {
       setStatus("success");
-      setMessage("Thanks — we'll be in touch shortly.");
+      setMessage("Thanks. We'll be in touch shortly.");
       return;
     }
 
@@ -40,7 +37,6 @@ export default function ContactForm() {
       name:     ((data.get("name")     as string) || "").trim(),
       email:    ((data.get("email")    as string) || "").trim(),
       business: ((data.get("business") as string) || "").trim(),
-      budget,
       message:  ((data.get("message")  as string) || "").trim(),
     };
 
@@ -51,7 +47,7 @@ export default function ContactForm() {
       return;
     }
 
-    // Client-side device rate limit (localStorage — survives tab changes)
+    // Client-side device rate limit (localStorage - survives tab changes)
     const { allowed, retryIn } = clientRateCheck();
     if (!allowed) {
       setStatus("error");
@@ -62,7 +58,7 @@ export default function ContactForm() {
     setStatus("submitting");
     setMessage("");
 
-    // POST to our own server-side API route — EmailJS keys never touch the browser
+    // POST to our own server-side API route - EmailJS keys never touch the browser
     let res: Response;
     try {
       res = await fetch("/api/contact/", {
@@ -71,8 +67,13 @@ export default function ContactForm() {
         body: JSON.stringify({ ...payload, openedAt: openedAt.current }),
         signal: AbortSignal.timeout(15000),
       });
-    } catch {
-      // Network failure — fall back to mailto so the lead is never lost
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "TimeoutError") {
+        setStatus("error");
+        setMessage("Request timed out. Please try again.");
+        return;
+      }
+      // Network failure - fall back to mailto so the lead is never lost
       window.location.href = contactMailto(payload);
       return;
     }
@@ -82,12 +83,9 @@ export default function ContactForm() {
       setStatus("success");
       setMessage("Got it. We'll come back to you with a considered response.");
       form.reset();
-      setBudget("");
     } else {
-      let detail = "";
-      try { detail = (await res.json()).error; } catch { /* non-JSON body */ }
       setStatus("error");
-      setMessage(detail || "Something went wrong. Please try again.");
+      setMessage("Something went wrong.");
     }
   };
 
@@ -150,30 +148,6 @@ export default function ContactForm() {
         />
       </label>
 
-      {/* ── Budget ── */}
-      <fieldset className="flex flex-col gap-3">
-        <legend className={labelCls}>Rough budget</legend>
-        <input type="hidden" name="budget" value={budget} />
-        <div className="mt-1 grid grid-cols-2 gap-2">
-          {budgets.map((b) => (
-            <button
-              key={b}
-              type="button"
-              onClick={() => setBudget(b)}
-              aria-pressed={budget === b}
-              disabled={submitting}
-              className={`flex min-h-[44px] items-center justify-center border px-4 py-2.5 font-mono text-xs uppercase tracking-[0.1em] transition-none ${
-                budget === b
-                  ? "border-kinetic bg-kinetic text-onyx"
-                  : "border-iron-bright text-ash hover:border-kinetic hover:text-white"
-              }`}
-            >
-              {b}
-            </button>
-          ))}
-        </div>
-      </fieldset>
-
       {/* ── Message ── */}
       <label className="flex flex-col gap-2.5">
         <span className={labelCls}>What do you need?</span>
@@ -190,7 +164,7 @@ export default function ContactForm() {
         />
       </label>
 
-      {/* Honeypot — off-screen, ignored by humans, caught server-side too */}
+      {/* Honeypot - off-screen, ignored by humans, caught server-side too */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
         <label>
           Company website

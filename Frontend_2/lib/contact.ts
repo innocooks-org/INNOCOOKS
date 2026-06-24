@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════════════
-   CONTACT — the single integration seam for the "Get in touch" form.
+   CONTACT - the single integration seam for the "Get in touch" form.
 
    The site is a static export (`output: "export"`), so there is no server
    runtime here to receive a POST. Instead the form talks to ONE external
@@ -15,14 +15,14 @@
      NEXT_PUBLIC_CONTACT_ACCESS_KEY=…              # optional (e.g. Web3Forms)
 
    If NEXT_PUBLIC_CONTACT_ENDPOINT is empty, the form gracefully falls back to
-   the original behaviour — composing a structured `mailto:` — so the site
+   the original behaviour - composing a structured `mailto:` - so the site
    works with zero backend out of the box and never loses a lead.
 
    SECURITY NOTE: anything in NEXT_PUBLIC_* is shipped to the browser. Only put
    PUBLIC keys here (the access keys these form services hand out are designed
    to be public + are rate-limited/domain-locked on their side). Never place a
    private SMTP password, Resend/SendGrid secret, or DB credential in a
-   NEXT_PUBLIC_ var — those belong behind your own endpoint.
+   NEXT_PUBLIC_ var - those belong behind your own endpoint.
    ════════════════════════════════════════════════════════════════════════ */
 
 export const CONTACT_EMAIL = "innocooks@gmail.com";
@@ -43,7 +43,6 @@ export type ContactPayload = {
   name: string;
   email: string;
   business: string;
-  budget: string;
   message: string;
 };
 
@@ -51,14 +50,14 @@ export type ContactResult = { ok: true } | { ok: false; error: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Client-side validation. The endpoint MUST still validate server-side — this
+/** Client-side validation. The endpoint MUST still validate server-side - this
  *  is only for fast, friendly feedback, never a security control. */
 export function validateContact(p: ContactPayload): string | null {
   if (!p.name.trim()) return "Please add your name.";
   if (!p.email.trim() || !EMAIL_RE.test(p.email.trim()))
     return "Please add a valid email so we can reply.";
   if (p.message.trim().length < 10)
-    return "Tell us a little more — what do you need?";
+    return "Tell us a little more. What do you need?";
   return null;
 }
 
@@ -73,7 +72,6 @@ export function contactMailto(p: ContactPayload): string {
       `Name: ${p.name}`,
       `Email: ${p.email}`,
       `Business: ${p.business}`,
-      `Budget: ${p.budget || "Not specified"}`,
       "",
       p.message,
     ].join("\n")
@@ -104,7 +102,7 @@ export async function sendContact(
       },
       body: JSON.stringify({
         ...p,
-        // included only when set — Web3Forms requires `access_key`
+        // included only when set - Web3Forms requires `access_key`
         ...(CONTACT_ACCESS_KEY ? { access_key: CONTACT_ACCESS_KEY } : {}),
         // helpful context for whoever receives it
         source: "innocooks.com/contact",
@@ -121,7 +119,7 @@ export async function sendContact(
       const data = await res.json();
       detail = data?.message || data?.error || "";
     } catch {
-      /* non-JSON error body — ignore */
+      /* non-JSON error body - ignore */
     }
     return {
       ok: false,

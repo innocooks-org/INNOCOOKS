@@ -5,9 +5,9 @@ import type * as THREE from "three";
 
 /* ════════════════════════════════════════════════════════════════════════
    HERO KINETIC BACKGROUND
-   Layer 1 — a raw-WebGL fragment shader: an "ember in the void" fluid that
+   Layer 1 - a raw-WebGL fragment shader: an "ember in the void" fluid that
              warms toward the cursor (no dependency, ~cheap).
-   Layer 2 — a Three.js cloud of flat-shaded cubes drifting with parallax,
+   Layer 2 - a Three.js cloud of flat-shaded cubes drifting with parallax,
              loaded dynamically so it never touches first paint / SSR.
    Both bail out gracefully: reduced-motion or no-WebGL → the static CSS
    ember-field behind them carries the mood.
@@ -55,7 +55,7 @@ export default function HeroCanvas() {
     if (reduced) return;
 
     const cleanups: Array<() => void> = [];
-    // loops only run while the hero is on-screen AND the tab is visible — this
+    // loops only run while the hero is on-screen AND the tab is visible - this
     // stops a full-screen fragment shader burning the GPU/battery (notably on
     // mobile) once you've scrolled past or switched tabs.
     let heroVisible = true;
@@ -81,7 +81,7 @@ export default function HeroCanvas() {
       io?.disconnect();
     });
 
-    /* ── Layer 1 — shader ─────────────────────────────────────── */
+    /* ── Layer 1 - shader ─────────────────────────────────────── */
     const canvas = shaderRef.current;
     const gl = canvas?.getContext("webgl", {
       alpha: false,
@@ -116,7 +116,7 @@ export default function HeroCanvas() {
         return s;
       };
 
-      // if any stage fails to compile/link, bail quietly — the CSS ember-field
+      // if any stage fails to compile/link, bail quietly - the CSS ember-field
       // behind the canvas carries the hero on that driver
       const vs = compile(gl.VERTEX_SHADER, VERT);
       const fs = compile(gl.FRAGMENT_SHADER, FRAG);
@@ -181,7 +181,7 @@ export default function HeroCanvas() {
       }
     }
 
-    /* ── Layer 2 — Three.js sculpture (desktop pointers only) ─── */
+    /* ── Layer 2 - Three.js sculpture (desktop pointers only) ─── */
     const fine = window.matchMedia("(pointer: fine)").matches;
     let disposed = false;
     if (fine && sculptRef.current) {
@@ -290,7 +290,7 @@ export default function HeroCanvas() {
           });
         })
         .catch(() => {
-          /* three unavailable — shader + CSS field carry the hero */
+          /* three unavailable - shader + CSS field carry the hero */
         });
     }
 

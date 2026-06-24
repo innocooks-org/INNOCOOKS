@@ -62,7 +62,7 @@ export default function Preloader() {
         <span className="label-mono label-mono--ash">BOOT_SEQUENCE</span>
       </div>
 
-      {/* centred ghost logo — fades out with the rest */}
+      {/* centred ghost logo - fades out with the rest */}
       <div className="pre-fade flex flex-1 items-center justify-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

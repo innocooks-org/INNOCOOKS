@@ -11,7 +11,7 @@ type Props = {
 };
 
 /** Fade-rise reveal, fires once on viewport entry.
- *  Content stays fully visible for crawlers, no-JS and reduced-motion users —
+ *  Content stays fully visible for crawlers, no-JS and reduced-motion users -
  *  the hidden state is only ever applied inside the motion media query. */
 export default function Reveal({ children, className, delay = 0, y = 22 }: Props) {
   const ref = useRef<HTMLDivElement>(null);

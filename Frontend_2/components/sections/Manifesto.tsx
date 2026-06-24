@@ -1,6 +1,6 @@
 "use client";
 
-/* What we build — a scroll-scrubbed manifesto. Each word lifts from dim→lit as
+/* What we build - a scroll-scrubbed manifesto. Each word lifts from dim→lit as
  * it crosses the viewport; the four capability words burn kinetic-orange, the
  * rest resolve to stark white. Reduced-motion / no-JS render it fully lit. */
 
@@ -82,7 +82,7 @@ export default function Manifesto() {
           </div>
         </div>
 
-        {/* the four capabilities — a full-width, evenly-split index row */}
+        {/* the four capabilities - a full-width, evenly-split index row */}
         <Reveal delay={0.05}>
           <ul
             className="mt-14 grid grid-cols-2 gap-px border border-iron sm:grid-cols-4 md:mt-20"

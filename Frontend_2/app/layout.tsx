@@ -24,7 +24,7 @@ const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken" })
 
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
-// contrasting serif italic — used only to emphasise keywords inside headings
+// contrasting serif italic - used only to emphasise keywords inside headings
 const instrument = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",

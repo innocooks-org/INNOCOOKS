@@ -36,7 +36,7 @@ export default function Studio() {
           </Reveal>
         </div>
 
-        {/* the five — a seam-ruled roster */}
+        {/* the five - a seam-ruled roster */}
         <Reveal delay={0.05}>
           <ul
             className="mt-12 grid grid-cols-1 gap-px border border-iron sm:grid-cols-2 lg:grid-cols-5"

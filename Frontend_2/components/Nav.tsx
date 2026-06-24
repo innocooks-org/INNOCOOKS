@@ -71,7 +71,7 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* full-screen overlay menu — `inert` when closed so its links are fully
+      {/* full-screen overlay menu - `inert` when closed so its links are fully
           removed from the tab order and the accessibility tree */}
       <div
         id="mobile-menu"

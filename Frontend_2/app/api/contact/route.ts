@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /* ─── IP rate limit (server-side, secondary guard) ──────────────────────────
-   In-memory Map — resets on cold start, which is intentional: this is a
+   In-memory Map - resets on cold start, which is intentional: this is a
    backstop against burst abuse. The client-side localStorage check (3 per 24h
    per device) is the primary per-user enforcement layer.
    Vercel spins up multiple lambdas under load; each has its own Map, so this
@@ -89,10 +89,10 @@ export async function POST(req: NextRequest) {
   if (!email || !EMAIL_RE.test(email))
     return NextResponse.json({ error: "Please add a valid email so we can reply." }, { status: 400 });
   if (message.length < 10)
-    return NextResponse.json({ error: "Tell us a little more — what do you need?" }, { status: 400 });
+    return NextResponse.json({ error: "Tell us a little more. What do you need?" }, { status: 400 });
 
   // ── Send via EmailJS REST API ─────────────────────────────────────────────
-  // Keys live in server-only env vars (no NEXT_PUBLIC_ prefix) — they never
+  // Keys live in server-only env vars (no NEXT_PUBLIC_ prefix) - they never
   // reach the browser bundle.
   const serviceId        = process.env.EMAILJS_SERVICE_ID          ?? "";
   const templateId       = process.env.EMAILJS_TEMPLATE_ID         ?? ""; // auto-reply → client
@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
     if (notifyTemplateId) {
       promises.push(sendTemplate(notifyTemplateId));
     } else {
-      console.warn("[contact] EMAILJS_NOTIFY_TEMPLATE_ID not set — team notification skipped.");
+      console.warn("[contact] EMAILJS_NOTIFY_TEMPLATE_ID not set - team notification skipped.");
     }
 
     const results = await Promise.all(promises);

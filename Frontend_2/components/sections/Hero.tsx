@@ -26,7 +26,7 @@ export default function Hero() {
         "-=0.6"
       );
 
-      // the wordmark recedes as you scroll past — depth
+      // the wordmark recedes as you scroll past - depth
       gsap.to(".hero-stage", {
         yPercent: -10,
         autoAlpha: 0.2,

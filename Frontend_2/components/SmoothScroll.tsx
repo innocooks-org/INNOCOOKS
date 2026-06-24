@@ -5,7 +5,7 @@ import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { usePathname, useSearchParams } from "next/navigation";
 
-/** Lenis smooth scroll — desktop pointer devices only, never on touch,
+/** Lenis smooth scroll - desktop pointer devices only, never on touch,
  *  never when the user prefers reduced motion. */
 function SmoothScrollInner() {
   const pathname = usePathname();

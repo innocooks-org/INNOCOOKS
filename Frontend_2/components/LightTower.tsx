@@ -20,7 +20,7 @@ export default function LightTower({ className = "" }: { className?: string }) {
         height: 120, // Keeps the layout stable so SCROLL text doesn't move
       }}
     >
-      {/* Invisible anchor at ring centre — RibbonField reads this for origin coords */}
+      {/* Invisible anchor at ring centre - RibbonField reads this for origin coords */}
       <span
         data-ribbon-origin
         style={{

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 
-/* Custom kinetic cursor — a crosshair ring + centre dot that lerps toward the
+/* Custom kinetic cursor - a crosshair ring + centre dot that lerps toward the
  * pointer and swells over interactive elements. Desktop fine-pointers only and
  * never under reduced-motion (there the native cursor is left alone). */
 export default function Cursor() {
